@@ -19,7 +19,6 @@ public class UserConfig {
 	}
 
 	private ApiInfo ApiInfo() {
-		// TODO Auto-generated method stub
 		return new ApiInfoBuilder().title("User Details Controller")
 				.description("Sample Documentation Generateed Using SWAGGER2 for our User Rest API").build();
 	}

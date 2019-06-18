@@ -1,5 +1,8 @@
 package com.employee;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,17 +12,18 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.employee.entity.Employee;
-import com.employee.repository.EmployeRepo;
-import com.employee.service.EmployeeServiceImple;
-import com.employee.service.EmployeeServiceInterface;
+import com.employee.repository.EmployeRepository;
+import com.employee.service.EmployeeNotFoundException;
+import com.employee.service.EmployeeService;
+import com.employee.service.IEmployeeService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TestEmployeeServiceImple {
 
 	@Mock
-	EmployeRepo employee;
+	EmployeRepository employee;
 	@InjectMocks
-	EmployeeServiceImple employeeServiceImple;
+	EmployeeService employeeService;
 
 	@Test
 	public void testAddEmployee() {
@@ -33,13 +37,13 @@ public class TestEmployeeServiceImple {
 		employee1.setSalary(100000);
 
 		Mockito.when(employee.save(employee1)).thenReturn(employee1);
-		String actualvalue = employeeServiceImple.addEmployee(employee1);
+		String actualvalue = employeeService.addEmployee(employee1);
 		Assert.assertEquals(actualvalue, "2 employee succesessfully created");
 
 	}
 
 	@Test
-	public void testGetEmployeeById() {
+	public void testGetEmployeeById() throws EmployeeNotFoundException {
 
 		Employee employee1 = new Employee();
 		employee1.setAddress("address");
@@ -51,7 +55,7 @@ public class TestEmployeeServiceImple {
 
 		Mockito.when(employee.findByEmployeeId(employee1.getEmployeeId())).thenReturn(employee1);
 //		Mockito.when(employee.findByEmployeeId(1)).thenReturn(employee1);
-		Employee actualvalue = employeeServiceImple.getEmployeeById(employee1.getEmployeeId());
+		Employee actualvalue = employeeService.getEmployeeById(employee1.getEmployeeId());
 		Assert.assertEquals(actualvalue, employee1);
 
 	}
@@ -66,29 +70,51 @@ public class TestEmployeeServiceImple {
 		employee1.setMobile("45543");
 		employee1.setSalary(10000);
 		
-		Mockito.when(employee.findByEmployeeId(employee1.getEmployeeId())).thenReturn(employee1);
+//		Mockito.when(employee.findByEmployeeId(employee1.getEmployeeId())).thenReturn(employee1);
 		Mockito.when(employee.save(employee1)).thenReturn(employee1);
 
-		String actualvalue = employeeServiceImple.updateEmployee(employee1);
+		String actualvalue = employeeService.updateEmployee(employee1);
 		System.out.println(actualvalue);
 		Assert.assertEquals(actualvalue, "");
 	}
 
-	// @Test
+	 @Test
+	  public void testGetAllEmployee() {
+	  
+	  Employee employee1 = new Employee(); employee1.setAddress("banglore");
+	  employee1.setDesignation("SE"); employee1.setEmployeeId(1);
+	  employee1.setEmployeeName("kusuma bk"); employee1.setMobile("9999999");
+	  employee1.setSalary(100000);
+	  
+	  Employee employee2 = new Employee(); employee1.setAddress("address");
+	  employee1.setDesignation("designation"); employee1.setEmployeeId(1);
+	  employee1.setEmployeeName("kusuma bk"); employee1.setMobile("9999999");
+	  employee1.setSalary(100000);
+	  
+	  List <Employee> employeeList=new ArrayList<>();
+	  employeeList.add(employee1);
+	  employeeList.add(employee2);
+
+	  Mockito.when(employee.findAll()).thenReturn(employeeList); //
+//	  Mockito.when(employee.findByEmployeeId(1)).thenReturn(employee1); Employee
+	  List<Employee> actualvalue = employeeService.getAllEmployees();
+	  Assert.assertEquals(actualvalue, employeeList);
+	  
+	  }
+	 
+	 
 	/*
-	 * public void testGetAllEmployee() {
+	 * @Test public void testDeleteEmployee() {
 	 * 
 	 * Employee employee1 = new Employee(); employee1.setAddress("address");
-	 * employee1.setDesignation("designation"); employee1.setEmployeeId(1);
+	 * employee1.setDesignation("designation"); employee1.setEmployeeId(2);
 	 * employee1.setEmployeeName("kusuma bk"); employee1.setMobile("9999999");
 	 * employee1.setSalary(100000);
 	 * 
-	 * Mockito.when(employee.findAll(employee1.getEmployeeId())).thenReturn(
-	 * employee1); //
-	 * Mockito.when(employee.findByEmployeeId(1)).thenReturn(employee1); Employee
-	 * actualvalue =
-	 * employeeServiceImple.getEmployeeById(employee1.getEmployeeId());
-	 * Assert.assertEquals(actualvalue, employee1);
+	 * Mockito.when(employee.deleteById(employee1.getEmployeeId())).thenReturn(
+	 * employee1); String actualvalue =
+	 * employeeService.deleteEmployee(employee1.getEmployeeId());
+	 * Assert.assertEquals(actualvalue, "2 employee succesessfully created");
 	 * 
 	 * }
 	 */

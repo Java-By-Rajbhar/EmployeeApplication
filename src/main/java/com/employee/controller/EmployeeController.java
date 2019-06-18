@@ -13,40 +13,42 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.employee.entity.Employee;
-import com.employee.service.EmployeeServiceInterface;
+import com.employee.service.EmployeeNotFoundException;
+import com.employee.service.IEmployeeService;
 
 @RestController
 @RequestMapping("/rest")
 public class EmployeeController {
-	
-	@Autowired EmployeeServiceInterface employeeServiceInterface;
-	
+
+	@Autowired
+	IEmployeeService iEmployeeService;
+
 	@PostMapping("/employee")
 	public String addEmployee(@RequestBody Employee employee) {
-		return employeeServiceInterface.addEmployee(employee);
-		
+		return iEmployeeService.addEmployee(employee);
+
 	}
-	
+
 	@PutMapping("/employee")
-	public String getUpdate(@RequestBody Employee employee) {
-		return employeeServiceInterface.updateEmployee(employee);
-		
+	public String updateEmployee(@RequestBody Employee employee) {
+		return iEmployeeService.updateEmployee(employee);
+
 	}
-	
-	@GetMapping("/employee/{id}")
-	public Employee getEmployee(@PathVariable("id") int employeeId) {
-		return employeeServiceInterface.getEmployeeById(employeeId);
-		
+
+	@GetMapping("/employee/{employeeId}")
+	public Employee getEmployee(@PathVariable("employeeId") int employeeId) throws EmployeeNotFoundException {
+		return iEmployeeService.getEmployeeById(employeeId);
+
 	}
-	@GetMapping("/employee/allEmployee")
-	public List<Employee> getAllEmployee()
-	{
-		return employeeServiceInterface.getAllEmployee();
+
+	@GetMapping("/employees")
+	public List<Employee> getAllEmployee() {
+		return iEmployeeService.getAllEmployees();
 	}
-	@DeleteMapping("/employee/deleteEmployee/{employeeId}")
-	public List<Employee> deleteEmployee(@PathVariable("employeeId") int id)
-	{
-		return employeeServiceInterface.deleteEmployee(id);
+
+	@DeleteMapping("/employee/{employeeId}")
+	public void deleteEmployee(@PathVariable("employeeId") int employeeId) {
+		 iEmployeeService.deleteEmployee(employeeId);
 	}
 
 }
