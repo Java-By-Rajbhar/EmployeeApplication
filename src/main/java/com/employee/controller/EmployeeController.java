@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.employee.entity.Employee;
-import com.employee.service.EmployeeNotFoundException;
+import com.employee.exception.EmployeeResourceNotFoundException;
 import com.employee.service.IEmployeeService;
 
 @RestController
@@ -36,7 +36,7 @@ public class EmployeeController {
 	}
 
 	@GetMapping("/employee/{employeeId}")
-	public Employee getEmployee(@PathVariable("employeeId") int employeeId) throws EmployeeNotFoundException {
+	public Employee getEmployee(@PathVariable("employeeId") int employeeId) throws EmployeeResourceNotFoundException {
 		return iEmployeeService.getEmployeeById(employeeId);
 
 	}
@@ -47,7 +47,7 @@ public class EmployeeController {
 	}
 
 	@DeleteMapping("/employee/{employeeId}")
-	public void deleteEmployee(@PathVariable("employeeId") int employeeId) {
+	public void deleteEmployee(@PathVariable("employeeId") int employeeId) throws EmployeeResourceNotFoundException {
 		 iEmployeeService.deleteEmployee(employeeId);
 	}
 
